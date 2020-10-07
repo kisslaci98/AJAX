@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AJAX 3 - External API</title>
+    <style>
+        .user {
+            display: flex;
+            background: #4fecec;
+            padding: 20px;
+            margin-bottom: 10px;
+            box-shadow: 3px 3px 3px navy;
+            width: 60%;
+            border-radius: 5px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container">
+    <button id="button">Get users</button><br>
+    <h1>GitHub users:</h1><br>
+    <div id="tartalom"></div>
+    <script>
+        //Create event listener
+        document.getElementById('button').addEventListener('click', loadJSONS);
+
+        function loadJSONS() {
+            let xhr = new XMLHttpRequest();
+
+            xhr.open('GET', 'https://api.github.com/users', true);
+
+            xhr.onload = function() {
+                if (this.status == 200) {
+                    let users = JSON.parse(this.responseText);
+                    //console.log(valtozo.name);
+
+                    let tartalom = "";
+                    users.forEach((user) => {
+                        tartalom += '<div class ="user">';
+                        let avatar = user.avatar_url;
+                        tartalom += `<img style='width:150px' src="${avatar}" alt="kép">`;
+                        tartalom += '<ul style="list-style-type:none">';
+                        tartalom += `<li>ID: ${user.id}</li>`;
+                        tartalom += `<li>Név: ${user.login}</li>`;
+                        tartalom += "</ul>";
+                        tartalom += "</div>";
+                    });
+                    document.getElementById("tartalom").innerHTML = tartalom;
+                }
+            }
+
+            xhr.send();
+        }
+    </script>
+    </div>
+</body>
+</html>
